@@ -68,8 +68,10 @@ class WebViewController: NSViewController, WKUIDelegate, WKNavigationDelegate {
             let newLink = navigationAction.request
             outputText += "\nThe new navigationAction is : " + String(describing: navigationAction) + ".\n\n"
             outputText += "The new URL is : " + String(describing: newLink.url!) + ".\n"
-            NotificationCenter.default.post(name: Notification.Name(rawValue: notifyKeyOutput), object: self)  
-            openSafari(link: newLink.url!)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: notifyKeyOutput), object: self)
+            
+            // WH: SMN-4634 This is very probably what happens for embedded browsers, it does not include a POST body.
+            myWebView.load(navigationAction.request)
         }  // end if
         return nil
     } // end func
@@ -113,7 +115,7 @@ class WebViewController: NSViewController, WKUIDelegate, WKNavigationDelegate {
             anchor.isActive = true
         }  // end forEach
         // let myURL = URL(string: "http://localhost:8042")
-        let myURL = URL(string: "http://www.web3.lu/")
+        let myURL = URL(string: "http://localhost:9292/")
         let myRequest = URLRequest(url: myURL!)
         myWebView.load(myRequest)
     }  // end func        
